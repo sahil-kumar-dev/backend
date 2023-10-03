@@ -1,9 +1,9 @@
 const userModel = require("../model/userSchema");
+const axios = require('axios')
 
 const signup = async (req, res, next) => {
 	const { name, email, password, confirmPassword } = req.body;
-	console.log(name, email, password, confirmPassword);
-
+	console.log(name,email,password,confirmPassword);
 	try {
 		const userInfo = new userModel(req.body)
 
@@ -27,6 +27,21 @@ const signup = async (req, res, next) => {
 		})
 	}
 }
+
+const userData = {
+	name: "Rahul kumar",
+	email: "rahulmehta@gmail.com",
+	password: "rahul1234",
+	confirmPassword: "rahul1234"
+}
+
+axios.post('http://localhost:8080/api/auth/signup', userData)
+	.then(response => {
+		console.log(response.data);
+	})
+	.catch(error => {
+		console.error(error);
+	});
 
 module.exports = {
 	signup
