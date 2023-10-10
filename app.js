@@ -3,7 +3,6 @@ const app = express()
 const authRouter = require('./router/authRoute')
 app.use(express.json())
 
-
 app.use('/api/auth', authRouter)
 
 
