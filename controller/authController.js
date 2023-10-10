@@ -1,6 +1,6 @@
 const userModel = require("../model/userSchema");
 const bcrypt = require('bcrypt')
-const axios = require('axios')
+const emailValidator=require('email-validator')
 
 const signUp = async (req, res, next) => {
 	const { name, email, password, confirmPassword } = req.body;
@@ -67,7 +67,7 @@ const signIn = async (req, res, next) => {
 			})
 			.select("+password");
 		console.log(user);
-		if (!user || password != user.password) {
+		if (!user || !(await bcrypt.compare(password,user.password))) {
 			// bcrypt.compare returns boolean value
 			return res.status(400).json({
 				success: false,
@@ -114,8 +114,29 @@ const getUser = async (req,res) => {
 	}
 }
 
+const logout=(req,res)=>{
+	try{
+		const cookieOption={
+			expires:new Date(),
+			httpOnly:true
+		}
+		req.cookie('token',null,cookieOption)
+
+		return res.status(200).json({
+			success:true,
+			message:"Logged Out"
+		})
+	}catch(e){
+		return res.status(400).json({
+			success:false,
+			message:e.message
+		})
+	}
+}
+
 module.exports = {
 	signUp,
 	signIn,
-	getUser
+	getUser,
+	logout
 }

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt=require('bcrypt')
 
 const { Schema } = mongoose;
 
@@ -19,6 +20,7 @@ const userSchema = new Schema({
 	},
 	password: {
 		type: String,
+		select:false
 	},
 	forgotPasswordToekn: {
 		type: String,
@@ -28,6 +30,14 @@ const userSchema = new Schema({
 	}
 }, {
 	timestamps: true
+})
+
+userSchema.pre('save',async function(next){
+	if(!this.isModified('password')){
+		return next()
+	}
+	this.password=await	bcrypt.hash(this.password,10);
+	return next()
 })
 
 userSchema.methods = {
