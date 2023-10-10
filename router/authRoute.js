@@ -1,13 +1,13 @@
 const express = require('express')
-const { signup,login,getUser } = require('../controller/authController')
+const { signUp,signIn,getUser } = require('../controller/authController')
 const jwtAuth = require('../middleware/jwtAuth')
 const authRouter = express.Router()
 
 
-authRouter.post('/signup', signup)
+authRouter.post('/signup', signUp)
 
-authRouter.post('/login', login)
+authRouter.post('/signin', signIn)
 
-authRouter.get('/getuser',jwtAuth,getUser)
+authRouter.get('/user',jwtAuth,getUser)
 
 module.exports = authRouter
